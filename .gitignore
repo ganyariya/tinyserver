@@ -28,5 +28,64 @@ go.work.sum
 .env
 
 # Editor/IDE
-# .idea/
-# .vscode/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build output directories
+build/
+dist/
+bin/
+
+# Application binaries - TinyServer specific
+/cmd/server/server
+/cmd/client/client
+/demo/phase1-tcp-echo/server/server
+/demo/phase1-tcp-echo/client/client
+/demo/phase2-http-parser/main
+/demo/phase3-simple-server/main
+/demo/phase4-http-client/main
+/demo/phase5-full-stack/server/server
+/demo/phase5-full-stack/client/client
+
+# Any Go binary without extension (common on Unix systems)
+cmd/server/server
+cmd/client/client
+demo/*/server
+demo/*/client  
+demo/*/main
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Profiling data
+*.prof
+*.pprof
+
+# Local configuration files
+.env.local
+config.local.*
+
+# Editor backup files
+*.orig
+*.rej
+.#*
+
+# Test artifacts
+test_*
+*.test_*
