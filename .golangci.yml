@@ -1,0 +1,51 @@
+run:
+  timeout: 5m
+  issues-exit-code: 1
+  tests: true
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+
+linters-settings:
+  gofmt:
+    simplify: true
+  goimports:
+    local-prefixes: github.com/ganyariya/tinyserver
+  golint:
+    min-confidence: 0.8
+  govet:
+    check-shadowing: true
+  misspell:
+    locale: US
+  gocyclo:
+    min-complexity: 10
+  dupl:
+    threshold: 100
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+
+linters:
+  enable:
+    - gofmt
+    - goimports
+    - govet
+    - golint
+    - ineffassign
+    - misspell
+    - gocyclo
+    - dupl
+    - goconst
+    - deadcode
+    - varcheck
+    - structcheck
+    - errcheck
+  disable:
+    - typecheck # Disable because we're building incrementally
+
+issues:
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
