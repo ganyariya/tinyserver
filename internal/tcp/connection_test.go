@@ -162,15 +162,35 @@ func TestBufferedConnectionFlush(t *testing.T) {
 
 	// Write some data
 	writer := conn.BufferedWriter()
-	_, err := writer.Write([]byte("test"))
+	testData := []byte("test")
+	_, err := writer.Write(testData)
 	if err != nil {
 		t.Fatalf("Write failed: %v", err)
 	}
+
+	// Read data in a goroutine to prevent blocking
+	readData := make([]byte, len(testData))
+	done := make(chan error, 1)
+	go func() {
+		_, err := client.Read(readData)
+		done <- err
+	}()
 
 	// Flush the data
 	err = conn.Flush()
 	if err != nil {
 		t.Fatalf("Flush failed: %v", err)
+	}
+
+	// Wait for read to complete
+	err = <-done
+	if err != nil {
+		t.Fatalf("Read failed: %v", err)
+	}
+
+	// Verify data
+	if string(readData) != string(testData) {
+		t.Errorf("Data mismatch: expected %s, got %s", string(testData), string(readData))
 	}
 }
 

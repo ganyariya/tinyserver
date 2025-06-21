@@ -14,7 +14,7 @@ import (
 
 // responseImpl provides internal implementation for HTTP responses
 type responseImpl struct {
-	*pkghttp.httpResponse
+	resp pkghttp.Response
 }
 
 // NewResponseFromRaw creates a response from raw HTTP data
@@ -39,7 +39,7 @@ func ParseResponse(r io.Reader) (pkghttp.Response, error) {
 	}
 	
 	// Create response
-	resp := pkghttp.NewResponse(statusCode, version).(*pkghttp.httpResponse)
+	resp := pkghttp.NewResponse(statusCode, version)
 	
 	// Parse headers
 	headers, err := parseResponseHeaders(scanner)
@@ -245,9 +245,9 @@ func FormatResponse(resp pkghttp.Response) string {
 	}
 	
 	// Status information
-	fmt.Fprintf(&buf, "Success: %t\n", resp.IsSuccess())
-	fmt.Fprintf(&buf, "Error: %t\n", resp.IsError())
-	fmt.Fprintf(&buf, "Redirection: %t\n", resp.IsRedirection())
+	fmt.Fprintf(&buf, "Success: %t\n", pkghttp.IsSuccess(resp.StatusCode()))
+	fmt.Fprintf(&buf, "Error: %t\n", pkghttp.IsError(resp.StatusCode()))
+	fmt.Fprintf(&buf, "Redirection: %t\n", pkghttp.IsRedirection(resp.StatusCode()))
 	
 	return buf.String()
 }

@@ -85,6 +85,15 @@ type Request interface {
 
 	// RemoteAddr returns the remote address
 	RemoteAddr() net.Addr
+
+	// GetHeader returns the first value of the header
+	GetHeader(string) string
+
+	// GetHeaders returns all values for the header
+	GetHeaders(string) []string
+
+	// HasHeader checks if a header exists
+	HasHeader(string) bool
 }
 
 // Response represents an HTTP response
@@ -121,6 +130,15 @@ type Response interface {
 
 	// WriteTo writes the response to a writer
 	WriteTo(io.Writer) (int64, error)
+
+	// GetHeader returns the first value of the header
+	GetHeader(string) string
+
+	// GetHeaders returns all values for the header
+	GetHeaders(string) []string
+
+	// HasHeader checks if a header exists
+	HasHeader(string) bool
 }
 
 // RequestParser parses HTTP requests from raw data

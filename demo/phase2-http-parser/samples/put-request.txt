@@ -1,0 +1,9 @@
+PUT /api/users/456 HTTP/1.1
+Host: api.example.com
+Content-Type: application/json
+Content-Length: 87
+Authorization: Bearer token123
+If-Match: "686897696a7c876b7e"
+User-Agent: TinyClient/1.0
+
+{"id":456,"name":"Jane Smith","email":"jane.smith@example.com","active":true,"role":"admin"}

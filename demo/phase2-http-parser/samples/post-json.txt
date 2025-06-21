@@ -1,0 +1,9 @@
+POST /api/auth/login HTTP/1.1
+Host: secure.example.com
+Content-Type: application/json
+Content-Length: 58
+User-Agent: TinyClient/1.0
+Accept: application/json
+X-Requested-With: XMLHttpRequest
+
+{"username":"john.doe","password":"secret123","remember":true}

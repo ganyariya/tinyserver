@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"strconv"
 	"strings"
 
 	"github.com/ganyariya/tinyserver/internal/common"
@@ -15,7 +14,7 @@ import (
 
 // requestImpl provides internal implementation for HTTP requests
 type requestImpl struct {
-	*pkghttp.httpRequest
+	*pkghttp.HTTPRequest
 }
 
 // NewRequestFromRaw creates a request from raw HTTP data
@@ -40,7 +39,7 @@ func ParseRequest(r io.Reader, remoteAddr net.Addr) (pkghttp.Request, error) {
 	}
 	
 	// Create request
-	req := pkghttp.NewRequest(method, path, version).(*pkghttp.httpRequest)
+	req := pkghttp.NewRequest(method, path, version).(*pkghttp.HTTPRequest)
 	req.SetRemoteAddr(remoteAddr)
 	
 	// Parse headers

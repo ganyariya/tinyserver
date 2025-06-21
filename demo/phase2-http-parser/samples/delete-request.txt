@@ -1,0 +1,6 @@
+DELETE /api/users/789 HTTP/1.1
+Host: api.example.com
+Authorization: Bearer admin-token-xyz
+User-Agent: TinyClient/1.0
+X-Requested-With: XMLHttpRequest
+X-Admin-Action: user-deletion

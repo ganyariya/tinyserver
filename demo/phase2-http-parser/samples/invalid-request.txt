@@ -1,0 +1,5 @@
+INVALID REQUEST LINE
+Host: malformed.example.com
+Missing-Method: true
+
+This is not a valid HTTP request and should trigger error handling.

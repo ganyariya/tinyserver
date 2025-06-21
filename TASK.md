@@ -9,16 +9,19 @@
 - ✅ **フェーズ1: TCP基礎実装** - TCP接続、リスナー、エコーサーバ・クライアントデモ
 
 ### 現在の状況
-- **実装済み**: TCP基盤、エコーサーバ・クライアント、開発ツール、テストスイート
-- **動作確認**: `./scripts/demo/run-phase1.sh` でTCP Echoデモが動作
-- **次のステップ**: フェーズ2 HTTPプロトコル実装
+- **実装済み**: TCP基盤、エコーサーバ・クライアント、HTTPプロトコル基盤、HTTPパーサーデモ
+- **動作確認**: `./scripts/demo/run-phase1.sh` でTCP Echoデモが動作、`./scripts/demo/run-phase2.sh` でHTTPパーサーデモが動作
+- **次のステップ**: フェーズ2 HTTPプロトコル実装完了（リファクタリング・ガイドブック）
 
 ### 実装ファイル一覧
 ```
 pkg/tcp/          - TCP公開インターフェース
+pkg/http/         - HTTP公開インターフェース
 internal/tcp/     - TCP実装詳細
+internal/http/    - HTTP実装詳細（パーサー、リクエスト・レスポンス処理）
 internal/common/  - 共通基盤（エラー、ログ、定数）
-demo/phase1-tcp-echo/ - TCPエコーデモ
+demo/phase1-tcp-echo/   - TCPエコーデモ
+demo/phase2-http-parser/ - HTTPパーサーデモ
 scripts/          - 開発支援スクリプト
 ```
 
@@ -110,11 +113,11 @@ scripts/          - 開発支援スクリプト
 - [x] `internal/http/request_test.go` - リクエスト処理のテスト
 - [x] `internal/http/response_test.go` - レスポンス生成のテスト
 
-### PHASE2-4: HTTPパーサーデモ
-- [ ] `demo/phase2-http-parser/main.go` - HTTPパーサー・アナライザーデモ
-- [ ] `demo/phase2-http-parser/README.md` - デモ実行方法の説明
-- [ ] テスト用のHTTPリクエストサンプルファイル
-- [ ] `scripts/demo/run-phase2.sh` - 自動デモ実行スクリプト
+### PHASE2-4: HTTPパーサーデモ ✅ COMPLETED
+- [x] `demo/phase2-http-parser/main.go` - HTTPパーサー・アナライザーデモ
+- [x] `demo/phase2-http-parser/README.md` - デモ実行方法の説明
+- [x] テスト用のHTTPリクエストサンプルファイル (`demo/phase2-http-parser/samples/`)
+- [x] `scripts/demo/run-phase2.sh` - 自動デモ実行スクリプト
 
 ### PHASE2-5: フェーズ2リファクタリング
 - [ ] マジック定数の削除（HTTPステータスコード、ヘッダー名など）

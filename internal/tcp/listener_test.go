@@ -2,6 +2,7 @@ package tcp
 
 import (
 	"net"
+	"strconv"
 	"sync"
 	"testing"
 	"time"
@@ -19,7 +20,7 @@ func TestNewListener(t *testing.T) {
 	listener.Close()
 
 	// Create TinyServer listener
-	tcpListener, err := NewListener("tcp", net.JoinHostPort("localhost", string(rune(port))))
+	tcpListener, err := NewListener("tcp", net.JoinHostPort("localhost", strconv.Itoa(port)))
 	if err != nil {
 		t.Fatalf("NewListener failed: %v", err)
 	}
@@ -43,7 +44,7 @@ func TestListenerAccept(t *testing.T) {
 	port := listener.Addr().(*net.TCPAddr).Port
 	listener.Close()
 
-	address := net.JoinHostPort("localhost", string(rune(port)))
+	address := net.JoinHostPort("localhost", strconv.Itoa(port))
 
 	// Create TinyServer listener
 	tcpListener, err := NewListener("tcp", address)
@@ -127,7 +128,7 @@ func TestListenerClose(t *testing.T) {
 	listener.Close()
 
 	// Create TinyServer listener
-	tcpListener, err := NewListener("tcp", net.JoinHostPort("localhost", string(rune(port))))
+	tcpListener, err := NewListener("tcp", net.JoinHostPort("localhost", strconv.Itoa(port)))
 	if err != nil {
 		t.Fatalf("NewListener failed: %v", err)
 	}
@@ -252,7 +253,7 @@ func TestTCPServer(t *testing.T) {
 	port := listener.Addr().(*net.TCPAddr).Port
 	listener.Close()
 
-	address := net.JoinHostPort("localhost", string(rune(port)))
+	address := net.JoinHostPort("localhost", strconv.Itoa(port))
 
 	// Create TCP server
 	server, err := NewServer("tcp", address)
@@ -362,7 +363,7 @@ func TestServerMultipleConnections(t *testing.T) {
 	port := listener.Addr().(*net.TCPAddr).Port
 	listener.Close()
 
-	address := net.JoinHostPort("localhost", string(rune(port)))
+	address := net.JoinHostPort("localhost", strconv.Itoa(port))
 
 	// Create TCP server
 	server, err := NewServer("tcp", address)

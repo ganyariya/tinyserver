@@ -250,7 +250,7 @@ func (cr *ChunkedReader) Read(p []byte) (int, error) {
 	
 	if cr.n == 0 {
 		// Read next chunk size
-		line, err := cr.r.ReadLine()
+		line, _, err := cr.r.ReadLine()
 		if err != nil {
 			cr.err = err
 			return 0, err
@@ -302,7 +302,7 @@ func (cr *ChunkedReader) Read(p []byte) (int, error) {
 func (cr *ChunkedReader) readTrailers() {
 	// Read trailing headers (usually empty)
 	for {
-		line, err := cr.r.ReadLine()
+		line, _, err := cr.r.ReadLine()
 		if err != nil || len(line) == 0 {
 			break
 		}
