@@ -77,14 +77,14 @@ scripts/          - 開発支援スクリプト
 - [x] 重複コードの削除
 - [x] コードフォーマットの統一（gofmt, golint, go vet）
 
-### PHASE1-6: フェーズ1教育用ガイドブック作成 🔄 TODO
-- [ ] `books/01-tcp-basics.md` - TCP基礎の教育用ガイド作成
-- [ ] TCP/IPプロトコルの仕組みと動作原理の解説
-- [ ] ソケットプログラミングの基本概念とAPI説明
-- [ ] エコーサーバ・クライアントの実装ステップバイステップガイド
-- [ ] トラブルシューティングとよくある問題の解決方法
-- [ ] ガイドに従って実装すればフェーズ1を完全に再現できる詳細度で記述
-- [ ] 学習者が理論と実装の両方を理解できる構成
+### PHASE1-6: フェーズ1教育用ガイドブック作成 ✅ COMPLETED
+- [x] `books/01-tcp-basics.md` - TCP基礎の教育用ガイド作成
+- [x] TCP/IPプロトコルの仕組みと動作原理の解説
+- [x] ソケットプログラミングの基本概念とAPI説明
+- [x] エコーサーバ・クライアントの実装ステップバイステップガイド
+- [x] トラブルシューティングとよくある問題の解決方法
+- [x] ガイドに従って実装すればフェーズ1を完全に再現できる詳細度で記述
+- [x] 学習者が理論と実装の両方を理解できる構成
 
 ### PHASE1-7: フェーズ1コミット ✅ COMPLETED
 - [x] フェーズ1の全変更をコミット
@@ -93,22 +93,22 @@ scripts/          - 開発支援スクリプト
 
 ## フェーズ2: HTTPプロトコル実装
 
-### PHASE2-1: HTTPインターフェースの設計
-- [ ] `pkg/http/interfaces.go` - HTTP抽象インターフェース定義
-- [ ] `pkg/http/constants.go` - HTTP定数（ステータスコード、ヘッダーなど）
-- [ ] `internal/http/constants.go` - 内部HTTP定数
+### PHASE2-1: HTTPインターフェースの設計 ✅ COMPLETED
+- [x] `pkg/http/interfaces.go` - HTTP抽象インターフェース定義
+- [x] `pkg/http/constants.go` - HTTP定数（ステータスコード、ヘッダーなど）
+- [x] `internal/http/constants.go` - 内部HTTP定数
 
-### PHASE2-2: HTTPリクエスト・レスポンス構造体
-- [ ] `pkg/http/request.go` - HTTPリクエスト型の定義
-- [ ] `pkg/http/response.go` - HTTPレスポンス型の定義
-- [ ] `internal/http/request.go` - HTTPリクエストの内部実装
-- [ ] `internal/http/response.go` - HTTPレスポンスの内部実装
+### PHASE2-2: HTTPリクエスト・レスポンス構造体 ✅ COMPLETED
+- [x] `pkg/http/request.go` - HTTPリクエスト型の定義
+- [x] `pkg/http/response.go` - HTTPレスポンス型の定義
+- [x] `internal/http/request.go` - HTTPリクエストの内部実装
+- [x] `internal/http/response.go` - HTTPレスポンスの内部実装
 
-### PHASE2-3: HTTPパーサーの実装
-- [ ] `internal/http/parser.go` - HTTPリクエスト・レスポンスパーサー
-- [ ] `internal/http/parser_test.go` - パーサーのテスト
-- [ ] `internal/http/request_test.go` - リクエスト処理のテスト
-- [ ] `internal/http/response_test.go` - レスポンス生成のテスト
+### PHASE2-3: HTTPパーサーの実装 ✅ COMPLETED
+- [x] `internal/http/parser.go` - HTTPリクエスト・レスポンスパーサー
+- [x] `internal/http/parser_test.go` - パーサーのテスト
+- [x] `internal/http/request_test.go` - リクエスト処理のテスト
+- [x] `internal/http/response_test.go` - レスポンス生成のテスト
 
 ### PHASE2-4: HTTPパーサーデモ
 - [ ] `demo/phase2-http-parser/main.go` - HTTPパーサー・アナライザーデモ

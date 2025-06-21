@@ -190,3 +190,8 @@ func LogResponse(statusCode int, contentLength int64, duration time.Duration) {
 func LogConnection(event, remoteAddr string) {
 	defaultLogger.LogConnection(event, remoteAddr)
 }
+
+// FormatHTTPDate formats a time for HTTP Date header
+func FormatHTTPDate() string {
+	return time.Now().UTC().Format("Mon, 02 Jan 2006 15:04:05 GMT")
+}

@@ -154,3 +154,13 @@ func InvalidInputError(message string) *TinyServerError {
 func InvalidInputErrorWithCause(message string, cause error) *TinyServerError {
 	return NewErrorWithCause(ErrorTypeInvalidInput, message, cause)
 }
+
+// HTTPError creates an HTTP error
+func HTTPError(message string) *TinyServerError {
+	return NewError(ErrorTypeProtocol, message)
+}
+
+// HTTPErrorWithCause creates an HTTP error with underlying cause
+func HTTPErrorWithCause(message string, cause error) *TinyServerError {
+	return NewErrorWithCause(ErrorTypeProtocol, message, cause)
+}
