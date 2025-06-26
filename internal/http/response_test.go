@@ -51,20 +51,20 @@ func TestWriteResponse(t *testing.T) {
 			}
 
 			result := buf.String()
-			
+
 			// Check status line
 			lines := strings.Split(result, "\r\n")
 			if len(lines) < 3 {
 				t.Fatalf("Response has too few lines: %d", len(lines))
 			}
-			
+
 			expectedLines := strings.Split(tt.expected, "\r\n")
 			statusLine := lines[0]
 			expectedStatusLine := expectedLines[0]
 			if statusLine != expectedStatusLine {
 				t.Errorf("Status line mismatch:\nExpected: %s\nGot: %s", expectedStatusLine, statusLine)
 			}
-			
+
 			// Check that all expected headers are present
 			headerLines := make(map[string]string)
 			for i := 1; i < len(lines) && lines[i] != ""; i++ {
@@ -73,7 +73,7 @@ func TestWriteResponse(t *testing.T) {
 					headerLines[parts[0]] = parts[1]
 				}
 			}
-			
+
 			expectedHeaders := make(map[string]string)
 			for i := 1; i < len(expectedLines) && expectedLines[i] != ""; i++ {
 				parts := strings.SplitN(expectedLines[i], ": ", 2)
@@ -81,7 +81,7 @@ func TestWriteResponse(t *testing.T) {
 					expectedHeaders[parts[0]] = parts[1]
 				}
 			}
-			
+
 			for expectedHeader, expectedValue := range expectedHeaders {
 				if actualValue, exists := headerLines[expectedHeader]; !exists {
 					t.Errorf("Missing header: %s", expectedHeader)
@@ -89,14 +89,14 @@ func TestWriteResponse(t *testing.T) {
 					t.Errorf("Header value mismatch for %s:\nExpected: %s\nGot: %s", expectedHeader, expectedValue, actualValue)
 				}
 			}
-			
+
 			// Check body
 			bodyStart := strings.Index(result, "\r\n\r\n")
 			expectedBodyStart := strings.Index(tt.expected, "\r\n\r\n")
 			if bodyStart == -1 || expectedBodyStart == -1 {
 				t.Fatal("Could not find body separator")
 			}
-			
+
 			actualBody := result[bodyStart+4:]
 			expectedBody := tt.expected[expectedBodyStart+4:]
 			if actualBody != expectedBody {
@@ -149,29 +149,29 @@ func TestParseStatusLine(t *testing.T) {
 			wantErr:        false,
 		},
 		{
-			name:        "empty line",
-			statusLine:  "",
-			wantErr:     true,
+			name:       "empty line",
+			statusLine: "",
+			wantErr:    true,
 		},
 		{
-			name:        "too few parts",
-			statusLine:  "HTTP/1.1",
-			wantErr:     true,
+			name:       "too few parts",
+			statusLine: "HTTP/1.1",
+			wantErr:    true,
 		},
 		{
-			name:        "invalid version",
-			statusLine:  "HTTP/2.0 200 OK",
-			wantErr:     true,
+			name:       "invalid version",
+			statusLine: "HTTP/2.0 200 OK",
+			wantErr:    true,
 		},
 		{
-			name:        "invalid status code",
-			statusLine:  "HTTP/1.1 999 Unknown",
-			wantErr:     true,
+			name:       "invalid status code",
+			statusLine: "HTTP/1.1 999 Unknown",
+			wantErr:    true,
 		},
 		{
-			name:        "non-numeric status code",
-			statusLine:  "HTTP/1.1 ABC OK",
-			wantErr:     true,
+			name:       "non-numeric status code",
+			statusLine: "HTTP/1.1 ABC OK",
+			wantErr:    true,
 		},
 	}
 

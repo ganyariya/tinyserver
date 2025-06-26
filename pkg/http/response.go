@@ -44,11 +44,11 @@ func NewTextResponse(statusCode StatusCode, version Version, text string) Respon
 		headers:    make(Header),
 		body:       strings.NewReader(text),
 	}
-	
+
 	// Set content type and length
 	resp.SetHeader(HeaderContentType, MimeTypeTextPlain)
 	resp.SetHeader(HeaderContentLength, strconv.Itoa(len(text)))
-	
+
 	return resp
 }
 
@@ -60,11 +60,11 @@ func NewHTMLResponse(statusCode StatusCode, version Version, html string) Respon
 		headers:    make(Header),
 		body:       strings.NewReader(html),
 	}
-	
+
 	// Set content type and length
 	resp.SetHeader(HeaderContentType, MimeTypeTextHTML)
 	resp.SetHeader(HeaderContentLength, strconv.Itoa(len(html)))
-	
+
 	return resp
 }
 
@@ -76,11 +76,11 @@ func NewJSONResponse(statusCode StatusCode, version Version, json string) Respon
 		headers:    make(Header),
 		body:       strings.NewReader(json),
 	}
-	
+
 	// Set content type and length
 	resp.SetHeader(HeaderContentType, MimeTypeJSON)
 	resp.SetHeader(HeaderContentLength, strconv.Itoa(len(json)))
-	
+
 	return resp
 }
 
@@ -143,47 +143,47 @@ func (r *httpResponse) ContentLength() int64 {
 	if r.headers == nil {
 		return 0
 	}
-	
+
 	contentLengths, exists := r.headers[HeaderContentLength]
 	if !exists || len(contentLengths) == 0 {
 		return 0
 	}
-	
+
 	length, err := strconv.ParseInt(contentLengths[0], 10, 64)
 	if err != nil {
 		return 0
 	}
-	
+
 	return length
 }
 
 // WriteTo writes the response to a writer
 func (r *httpResponse) WriteTo(w io.Writer) (int64, error) {
 	var totalWritten int64
-	
+
 	// Write status line
-	statusLine := fmt.Sprintf("%s %d %s%s", 
-		r.version, 
-		r.statusCode, 
+	statusLine := fmt.Sprintf("%s %d %s%s",
+		r.version,
+		r.statusCode,
 		StatusText(r.statusCode),
 		HTTPSeparator)
-	
+
 	n, err := w.Write([]byte(statusLine))
 	totalWritten += int64(n)
 	if err != nil {
 		return totalWritten, err
 	}
-	
+
 	// Write headers
 	if r.headers != nil {
 		for name, values := range r.headers {
 			for _, value := range values {
-				headerLine := fmt.Sprintf("%s%s%s%s", 
-					name, 
-					HTTPHeaderSeparator, 
+				headerLine := fmt.Sprintf("%s%s%s%s",
+					name,
+					HTTPHeaderSeparator,
 					value,
 					HTTPSeparator)
-				
+
 				n, err := w.Write([]byte(headerLine))
 				totalWritten += int64(n)
 				if err != nil {
@@ -192,14 +192,14 @@ func (r *httpResponse) WriteTo(w io.Writer) (int64, error) {
 			}
 		}
 	}
-	
+
 	// Write header-body separator
 	n, err = w.Write([]byte(HTTPSeparator))
 	totalWritten += int64(n)
 	if err != nil {
 		return totalWritten, err
 	}
-	
+
 	// Write body if present
 	if r.body != nil {
 		n, err := io.Copy(w, r.body)
@@ -208,7 +208,7 @@ func (r *httpResponse) WriteTo(w io.Writer) (int64, error) {
 			return totalWritten, err
 		}
 	}
-	
+
 	return totalWritten, nil
 }
 
@@ -217,12 +217,12 @@ func (r *httpResponse) GetHeader(name string) string {
 	if r.headers == nil {
 		return ""
 	}
-	
+
 	values, exists := r.headers[name]
 	if !exists || len(values) == 0 {
 		return ""
 	}
-	
+
 	return values[0]
 }
 
@@ -231,7 +231,7 @@ func (r *httpResponse) GetHeaders(name string) []string {
 	if r.headers == nil {
 		return nil
 	}
-	
+
 	return r.headers[name]
 }
 
@@ -240,7 +240,7 @@ func (r *httpResponse) HasHeader(name string) bool {
 	if r.headers == nil {
 		return false
 	}
-	
+
 	_, exists := r.headers[name]
 	return exists
 }
@@ -270,13 +270,13 @@ func (r *httpResponse) Clone() Response {
 		headers:    make(Header),
 		body:       r.body,
 	}
-	
+
 	// Deep copy headers
 	for name, values := range r.headers {
 		clone.headers[name] = make([]string, len(values))
 		copy(clone.headers[name], values)
 	}
-	
+
 	return clone
 }
 

@@ -32,16 +32,16 @@ func (p *httpParser) Parse(r io.Reader) (pkghttp.Request, error) {
 func (p *httpParser) ParseWithTimeout(r io.Reader, timeout time.Duration) (pkghttp.Request, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
-	
+
 	// Create a channel to receive the result
 	resultChan := make(chan parseResult, 1)
-	
+
 	// Parse in a goroutine
 	go func() {
 		req, err := p.Parse(r)
 		resultChan <- parseResult{req: req, err: err}
 	}()
-	
+
 	// Wait for result or timeout
 	select {
 	case result := <-resultChan:
@@ -62,43 +62,43 @@ func (p *httpParser) Validate(req pkghttp.Request) error {
 	if req == nil {
 		return common.HTTPError("request is nil")
 	}
-	
+
 	// Validate method
 	if req.Method() == "" {
 		return common.HTTPError(ErrInvalidMethod)
 	}
-	
+
 	if !isValidMethod(req.Method()) {
 		return common.HTTPError(ErrInvalidMethod)
 	}
-	
+
 	// Validate path
 	if req.Path() == "" {
 		return common.HTTPError(ErrInvalidPath)
 	}
-	
+
 	if !isValidPath(req.Path()) {
 		return common.HTTPError(ErrInvalidPath)
 	}
-	
+
 	// Validate version
 	if !isValidVersion(req.Version()) {
 		return common.HTTPError(ErrInvalidVersion)
 	}
-	
+
 	// Validate headers
 	for name := range req.Headers() {
 		if !isValidHeaderName(name) {
 			return common.HTTPError(ErrInvalidHeader)
 		}
 	}
-	
+
 	// Validate content length consistency
 	contentLength := req.ContentLength()
 	if contentLength < 0 {
 		return common.HTTPError(ErrInvalidContentLength)
 	}
-	
+
 	return nil
 }
 
@@ -129,16 +129,16 @@ func (p *httpResponseParser) ParseResponse(r io.Reader) (pkghttp.Response, error
 func (p *httpResponseParser) ParseResponseWithTimeout(r io.Reader, timeout time.Duration) (pkghttp.Response, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
-	
+
 	// Create a channel to receive the result
 	resultChan := make(chan responseParseResult, 1)
-	
+
 	// Parse in a goroutine
 	go func() {
 		resp, err := p.ParseResponse(r)
 		resultChan <- responseParseResult{resp: resp, err: err}
 	}()
-	
+
 	// Wait for result or timeout
 	select {
 	case result := <-resultChan:
@@ -162,7 +162,7 @@ type responseParseResult struct {
 
 // messageParser provides unified parsing for HTTP messages
 type messageParser struct {
-	logger    *common.Logger
+	logger        *common.Logger
 	maxHeaderSize int
 	maxBodySize   int64
 }
@@ -191,26 +191,26 @@ func (p *messageParser) ParseHTTPMessage(r io.Reader) ([]string, pkghttp.Header,
 	scanner := bufio.NewScanner(r)
 	var lines []string
 	var totalSize int
-	
+
 	// Read until we find the first line (status/request line)
 	if !scanner.Scan() {
 		return nil, nil, nil, common.HTTPError(ErrUnexpectedEOF)
 	}
-	
+
 	firstLine := scanner.Text()
 	lines = append(lines, firstLine)
 	totalSize += len(firstLine)
-	
+
 	if totalSize > p.maxHeaderSize {
 		return nil, nil, nil, common.HTTPError(ErrHeaderTooLarge)
 	}
-	
+
 	// Parse headers
 	headers, err := parseHeaders(scanner)
 	if err != nil {
 		return nil, nil, nil, err
 	}
-	
+
 	// Calculate remaining data for body
 	var bodyReader io.Reader
 	if scanner.Scan() {
@@ -222,14 +222,14 @@ func (p *messageParser) ParseHTTPMessage(r io.Reader) ([]string, pkghttp.Header,
 			r, // Original reader for remaining data
 		)
 	}
-	
+
 	return lines, headers, bodyReader, nil
 }
 
 // ChunkedReader handles chunked transfer encoding
 type ChunkedReader struct {
 	r      *bufio.Reader
-	n      int64  // bytes remaining in current chunk
+	n      int64 // bytes remaining in current chunk
 	err    error
 	logger *common.Logger
 }
@@ -247,7 +247,7 @@ func (cr *ChunkedReader) Read(p []byte) (int, error) {
 	if cr.err != nil {
 		return 0, cr.err
 	}
-	
+
 	if cr.n == 0 {
 		// Read next chunk size
 		line, _, err := cr.r.ReadLine()
@@ -255,46 +255,46 @@ func (cr *ChunkedReader) Read(p []byte) (int, error) {
 			cr.err = err
 			return 0, err
 		}
-		
+
 		// Parse chunk size (hexadecimal)
 		chunkSize, err := parseChunkSize(string(line))
 		if err != nil {
 			cr.err = common.HTTPError(ErrChunkedEncodingInvalid)
 			return 0, cr.err
 		}
-		
+
 		if chunkSize == 0 {
 			// End of chunks, read trailing headers if any
 			cr.readTrailers()
 			cr.err = io.EOF
 			return 0, io.EOF
 		}
-		
+
 		if chunkSize > MaxChunkSize {
 			cr.err = common.HTTPError(ErrChunkedEncodingInvalid)
 			return 0, cr.err
 		}
-		
+
 		cr.n = int64(chunkSize)
 	}
-	
+
 	// Read data from current chunk
 	if int64(len(p)) > cr.n {
 		p = p[:cr.n]
 	}
-	
+
 	n, err := cr.r.Read(p)
 	cr.n -= int64(n)
-	
+
 	if cr.n == 0 && err == nil {
 		// End of chunk, read trailing CRLF
 		cr.r.ReadLine()
 	}
-	
+
 	if err != nil {
 		cr.err = err
 	}
-	
+
 	return n, err
 }
 
@@ -317,7 +317,7 @@ func parseChunkSize(line string) (int, error) {
 	if idx := bytes.IndexByte([]byte(line), ';'); idx >= 0 {
 		line = line[:idx]
 	}
-	
+
 	// Parse hexadecimal
 	var size int
 	for _, b := range []byte(line) {
@@ -331,7 +331,7 @@ func parseChunkSize(line string) (int, error) {
 			return 0, common.HTTPError(ErrChunkedEncodingInvalid)
 		}
 	}
-	
+
 	return size, nil
 }
 
@@ -356,14 +356,14 @@ func (clr *ContentLengthReader) Read(p []byte) (int, error) {
 	if clr.remaining <= 0 {
 		return 0, io.EOF
 	}
-	
+
 	if int64(len(p)) > clr.remaining {
 		p = p[:clr.remaining]
 	}
-	
+
 	n, err := clr.r.Read(p)
 	clr.remaining -= int64(n)
-	
+
 	return n, err
 }
 
@@ -387,21 +387,21 @@ func NewHTTPMessageBuilder() *HTTPMessageBuilder {
 // BuildRequest builds an HTTP request message
 func (b *HTTPMessageBuilder) BuildRequest(req pkghttp.Request) ([]byte, error) {
 	var buf bytes.Buffer
-	
+
 	if err := WriteRequest(&buf, req); err != nil {
 		return nil, err
 	}
-	
+
 	return buf.Bytes(), nil
 }
 
 // BuildResponse builds an HTTP response message
 func (b *HTTPMessageBuilder) BuildResponse(resp pkghttp.Response) ([]byte, error) {
 	var buf bytes.Buffer
-	
+
 	if err := WriteResponse(&buf, resp); err != nil {
 		return nil, err
 	}
-	
+
 	return buf.Bytes(), nil
 }

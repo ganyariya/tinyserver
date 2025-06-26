@@ -42,7 +42,7 @@ func TestParseRequest(t *testing.T) {
 			rawData: "POST /api/data HTTP/1.1\r\n" +
 				"Host: example.com\r\n" +
 				"Content-Type: application/json\r\n" +
-				"Content-Length: 13\r\n" +
+				"Content-Length: 14\r\n" +
 				"\r\n" +
 				"{\"test\": true}",
 			wantErr: false,
@@ -132,7 +132,7 @@ func TestParseResponse(t *testing.T) {
 			name: "successful response",
 			rawData: "HTTP/1.1 200 OK\r\n" +
 				"Content-Type: text/plain\r\n" +
-				"Content-Length: 12\r\n" +
+				"Content-Length: 13\r\n" +
 				"\r\n" +
 				"Hello, World!",
 			wantErr: false,

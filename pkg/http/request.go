@@ -124,17 +124,17 @@ func (r *HTTPRequest) ContentLength() int64 {
 	if r.headers == nil {
 		return 0
 	}
-	
+
 	contentLengths, exists := r.headers[HeaderContentLength]
 	if !exists || len(contentLengths) == 0 {
 		return 0
 	}
-	
+
 	length, err := strconv.ParseInt(contentLengths[0], 10, 64)
 	if err != nil {
 		return 0
 	}
-	
+
 	return length
 }
 
@@ -153,28 +153,28 @@ func (r *HTTPRequest) parseQueryParams() {
 	if r.queryParams == nil {
 		r.queryParams = make(map[string]string)
 	}
-	
+
 	if r.path == "" {
 		return
 	}
-	
+
 	// Find query string separator
 	queryIndex := strings.Index(r.path, "?")
 	if queryIndex == -1 {
 		return
 	}
-	
+
 	queryString := r.path[queryIndex+1:]
 	if queryString == "" {
 		return
 	}
-	
+
 	// Parse query string
 	params, err := url.ParseQuery(queryString)
 	if err != nil {
 		return
 	}
-	
+
 	// Convert url.Values to map[string]string (take first value for each key)
 	for key, values := range params {
 		if len(values) > 0 {
@@ -188,12 +188,12 @@ func (r *HTTPRequest) GetHeader(name string) string {
 	if r.headers == nil {
 		return ""
 	}
-	
+
 	values, exists := r.headers[name]
 	if !exists || len(values) == 0 {
 		return ""
 	}
-	
+
 	return values[0]
 }
 
@@ -202,7 +202,7 @@ func (r *HTTPRequest) GetHeaders(name string) []string {
 	if r.headers == nil {
 		return nil
 	}
-	
+
 	return r.headers[name]
 }
 
@@ -211,7 +211,7 @@ func (r *HTTPRequest) HasHeader(name string) bool {
 	if r.headers == nil {
 		return false
 	}
-	
+
 	_, exists := r.headers[name]
 	return exists
 }
@@ -221,12 +221,12 @@ func (r *HTTPRequest) PathWithoutQuery() string {
 	if r.path == "" {
 		return ""
 	}
-	
+
 	queryIndex := strings.Index(r.path, "?")
 	if queryIndex == -1 {
 		return r.path
 	}
-	
+
 	return r.path[:queryIndex]
 }
 
@@ -241,17 +241,17 @@ func (r *HTTPRequest) Clone() Request {
 		body:        r.body,
 		remoteAddr:  r.remoteAddr,
 	}
-	
+
 	// Deep copy headers
 	for name, values := range r.headers {
 		clone.headers[name] = make([]string, len(values))
 		copy(clone.headers[name], values)
 	}
-	
+
 	// Deep copy query params
 	for key, value := range r.queryParams {
 		clone.queryParams[key] = value
 	}
-	
+
 	return clone
 }

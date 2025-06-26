@@ -55,20 +55,20 @@ func TestWriteRequest(t *testing.T) {
 			}
 
 			result := buf.String()
-			
+
 			// Check request line
 			lines := strings.Split(result, "\r\n")
 			if len(lines) < 2 {
 				t.Fatalf("Request has too few lines: %d", len(lines))
 			}
-			
+
 			expectedLines := strings.Split(tt.expected, "\r\n")
 			requestLine := lines[0]
 			expectedRequestLine := expectedLines[0]
 			if requestLine != expectedRequestLine {
 				t.Errorf("Request line mismatch:\nExpected: %s\nGot: %s", expectedRequestLine, requestLine)
 			}
-			
+
 			// Check that all expected headers are present
 			headerLines := make(map[string]string)
 			for i := 1; i < len(lines) && lines[i] != ""; i++ {
@@ -77,7 +77,7 @@ func TestWriteRequest(t *testing.T) {
 					headerLines[parts[0]] = parts[1]
 				}
 			}
-			
+
 			expectedHeaders := make(map[string]string)
 			for i := 1; i < len(expectedLines) && expectedLines[i] != ""; i++ {
 				parts := strings.SplitN(expectedLines[i], ": ", 2)
@@ -85,7 +85,7 @@ func TestWriteRequest(t *testing.T) {
 					expectedHeaders[parts[0]] = parts[1]
 				}
 			}
-			
+
 			for expectedHeader, expectedValue := range expectedHeaders {
 				if actualValue, exists := headerLines[expectedHeader]; !exists {
 					t.Errorf("Missing header: %s", expectedHeader)
@@ -93,7 +93,7 @@ func TestWriteRequest(t *testing.T) {
 					t.Errorf("Header value mismatch for %s:\nExpected: %s\nGot: %s", expectedHeader, expectedValue, actualValue)
 				}
 			}
-			
+
 			// Check body if present
 			bodyStart := strings.Index(result, "\r\n\r\n")
 			expectedBodyStart := strings.Index(tt.expected, "\r\n\r\n")
@@ -213,11 +213,11 @@ func TestParseRequestLine(t *testing.T) {
 
 func TestParseHeader(t *testing.T) {
 	tests := []struct {
-		name      string
+		name       string
 		headerLine string
-		wantName  string
-		wantValue string
-		wantErr   bool
+		wantName   string
+		wantValue  string
+		wantErr    bool
 	}{
 		{
 			name:       "simple header",
@@ -311,7 +311,7 @@ func TestParseRequestWithBody(t *testing.T) {
 	rawData := "POST /api/data HTTP/1.1\r\n" +
 		"Host: example.com\r\n" +
 		"Content-Type: application/json\r\n" +
-		"Content-Length: 13\r\n" +
+		"Content-Length: 14\r\n" +
 		"\r\n" +
 		"{\"test\": true}"
 
@@ -326,8 +326,8 @@ func TestParseRequestWithBody(t *testing.T) {
 		t.Errorf("Expected POST, got %s", req.Method())
 	}
 
-	if req.ContentLength() != 13 {
-		t.Errorf("Expected content length 13, got %d", req.ContentLength())
+	if req.ContentLength() != 14 {
+		t.Errorf("Expected content length 14, got %d", req.ContentLength())
 	}
 
 	if req.GetHeader("Content-Type") != "application/json" {
